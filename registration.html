@@ -3,51 +3,66 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Register</title>
+    <title>Login Page</title>
     <style>
         body {
-            font-family: 'Arial', sans-serif;
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #007bff, #ffffff);
+            background-size: cover;
             margin: 0;
             padding: 0;
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
-            background: linear-gradient(135deg, #007bff 40%, #ffffff 100%);
-            background-size: cover;
-            background-position: center;
-            background-repeat: no-repeat;
         }
 
-        body::before {
-            content: "";
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: inherit;
-            filter: blur(6px);
-            z-index: -1;
-        }
-
-        .register-container {
+        .login-container {
+            position: relative;
             background-color: rgba(255, 255, 255, 0.9);
-            padding: 2.5rem;
-            border-radius: 15px;
-            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
-            max-width: 400px;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
             width: 100%;
-            box-sizing: border-box;
-            z-index: 1;
+            max-width: 400px;
+            backdrop-filter: blur(10px);
         }
 
         h1 {
             text-align: center;
             margin-bottom: 2rem;
+            color: #333;
+            animation: slideIn 0.5s ease-out;
+        }
+
+        .user-type-selector {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .user-type-selector button {
+            background-color: #f0f0f0;
+            color: #333;
+            border: none;
+            padding: 0.75rem;
+            margin-bottom: 0.5rem;
+            border-radius: 5px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background-color 0.3s, color 0.3s, transform 0.2s;
+        }
+
+        .user-type-selector button:hover {
+            background-color: #e0e0e0;
             color: #007bff;
-            font-size: 2rem;
-            font-weight: 600;
+            transform: translateY(-2px);
+        }
+
+        .user-type-selector button.active {
+            background-color: #007bff;
+            color: white;
+            transform: scale(1.05);
         }
 
         form {
@@ -56,25 +71,12 @@
         }
 
         input[type="text"],
-        input[type="email"],
-        input[type="password"],
-        select {
+        input[type="password"] {
             padding: 0.75rem;
-            margin-bottom: 1.25rem;
-            border-radius: 8px;
+            margin-bottom: 1rem;
+            border-radius: 5px;
             border: 1px solid #ccc;
             font-size: 1rem;
-            width: 100%;
-            box-sizing: border-box;
-        }
-
-        input[type="text"]:focus,
-        input[type="email"]:focus,
-        input[type="password"]:focus,
-        select:focus {
-            border-color: #007bff;
-            outline: none;
-            box-shadow: 0 0 8px rgba(0, 123, 255, 0.3);
         }
 
         button[type="submit"] {
@@ -82,11 +84,10 @@
             background-color: #007bff;
             color: white;
             border: none;
-            border-radius: 8px;
+            border-radius: 5px;
             font-size: 1rem;
             cursor: pointer;
             transition: background-color 0.3s;
-            margin-top: 0.5rem;
         }
 
         button[type="submit"]:hover {
@@ -97,132 +98,76 @@
             outline: none;
         }
 
-        .register-hint {
+        .forgot-password-link {
+            display: block;
             text-align: center;
             margin-top: 1rem;
-            font-size: 0.875rem;
-            color: #555;
-        }
-
-        .register-hint a {
             color: #007bff;
             text-decoration: none;
         }
 
-        .register-hint a:hover {
+        .forgot-password-link:hover {
             text-decoration: underline;
         }
 
-        @media (max-width: 480px) {
-            .register-container {
-                padding: 2rem;
-                max-width: 90%;
-            }
-
-            h1 {
-                font-size: 1.5rem;
-            }
+        .back-button {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background: none;
+            border: none;
+            color: black;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: color 0.3s;
         }
 
-        select {
-            appearance: none;
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23333' d='M10.293 3.293L6 7.586 1.707 3.293A1 1 0 00.293 4.707l5 5a1 1 0 001.414 0l5-5a1 1 0 10-1.414-1.414z'/%3E%3C/svg%3E");
-            background-repeat: no-repeat;
-            background-position: right 0.75rem center;
-            background-size: 0.75rem;
-        }
-
-        select:focus {
-            border-color: #007bff;
-            outline: none;
-            box-shadow: 0 0 8px rgba(0, 123, 255, 0.3);
+        .back-button:hover {
+            color: #555;
         }
     </style>
 </head>
 <body>
-    <div class="register-container">
-        <h1>Register</h1>
-        <form id="register-form">
-            <input type="text" id="username" placeholder="Username" required>
-            <input type="email" id="email" placeholder="Email" required>
-            <input type="password" id="password" placeholder="Password" required>
-            <select id="user-role" required>
-                <option value="" disabled selected>Select your role</option>
-                <option value="student">Student</option>
-                <option value="faculty">Faculty</option>
-                <option value="alumni">Alumni</option>
-                <option value="admin">Admin</option>
-            </select>
-            <button type="submit">Register</button>
-        </form>
-        <div class="register-hint">
-            Already have an account? <a href="index.html">Login</a>
+    <div class="login-container">
+        <h1>LOGIN</h1>
+        <div class="user-type-selector">
+            <button type="button" class="user-type" data-type="student">Student Login</button>
+            <button type="button" class="user-type" data-type="alumni">Alumni Login</button>
+            <button type="button" class="user-type" data-type="faculty">Faculty Login</button>
+            <button type="button" class="user-type" data-type="admin">Admin Login</button>
         </div>
     </div>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
 
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-app.js";
-        import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-auth.js";
-        import { getDatabase, ref, set } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-database.js";
+    <script>
+        const userTypeButtons = document.querySelectorAll('.user-type');
 
-        const firebaseConfig = {
-            apiKey: "AIzaSyC-4tvmQmC11OsoWAfQlpJwAsa9nQKsn0w",
-            authDomain: "udaan-68610.firebaseapp.com",
-            projectId: "udaan-68610",
-            storageBucket: "udaan-68610.appspot.com",
-            messagingSenderId: "375083836802",
-            appId: "1:375083836802:web:db46de9d3a3e2444461b9b"
-        };
+        userTypeButtons.forEach((button, index) => {
+            button.style.animationDelay = `${index * 0.1}s`;
+            button.style.animation = 'slideIn 0.5s ease-out forwards';
+            
+            button.addEventListener('click', () => {
+                userTypeButtons.forEach(btn => btn.classList.remove('active'));
+                button.classList.add('active');
+                
+                if (button.dataset.type === 'student') {
+                    window.location.href = 'stud_log.html';
+                } else if (button.dataset.type === 'alumni') {
+                    window.location.href = 'alumni_log.html';
+                } else if (button.dataset.type === 'faculty') {
+                    window.location.href = 'faculty_log.html';
+                } else if (button.dataset.type === 'admin') {
+                    window.location.href = 'admin_log.html';
+                }
+                
+                console.log('Selected user type:', button.dataset.type);
+            });
+        });
 
-        const app = initializeApp(firebaseConfig);
-        const auth = getAuth();
-        const database = getDatabase(app);
-
-        function encryptPassword(password) {
-            const hashedPassword = CryptoJS.SHA256(password).toString();
-            return hashedPassword;
-        }
-
-        function registerUser(event) {
-            event.preventDefault();  
-            const email = document.getElementById('email').value;
-            let password = document.getElementById('password').value;
-            const username = document.getElementById('username').value;
-            const userRole = document.getElementById('user-role').value;
-
-            if (password.length < 6) {
-                alert('Password must be at least 6 characters long');
-                return;
-            }
-
-            if (!email || !password || !username || !userRole) {
-                alert('Please fill in all fields');
-                return;
-            }
-
-            password = encryptPassword(password);
-
-            createUserWithEmailAndPassword(auth, email, password)
-                .then((userCredential) => {
-                    const user = userCredential.user;
-                    set(ref(database, 'users/' + user.uid), {
-                        username: username,
-                        email: email,
-                        role: userRole
-                    });
-                })
-                .then(() => {
-                    alert("User registered successfully");
-                    window.location.href = 'index.html'; 
-                })
-                .catch((error) => {
-                    console.error("Error during registration:", error.message);
-                    alert("Error: " + error.message);
-                });
-        }
-
-        document.getElementById('register-form').addEventListener('submit', registerUser);
+        const backButton = document.getElementById('backButton');
+        backButton.addEventListener('click', (event) => {
+            event.preventDefault();
+            window.location.href = 'stud_log.html';
+        });
     </script>
 </body>
 </html>
